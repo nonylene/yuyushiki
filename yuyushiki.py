@@ -11,7 +11,6 @@ app.config.update(
     DEBUG=True,
 )
 
-
 con = Connection('localhost', 27017)
 collection = con.yuyushiki.comics
 atexit.register(con.close)
@@ -45,64 +44,6 @@ def upsert(path, script='', characters=[], reedit=False, useless=False):
     d = {'path':path, 'script':script, 'characters':characters,
             'reedit':reedit, 'useless':useless}
     collection.update({'path':path}, d, upsert=True) 
-
-def _unused():
-    prev = False
-    if request.method == 'POST':
-        data = request.form
-        if data.get('action') == 'prev': #前の画像に戻る
-            path = data.get('path')
-            prev = True
-        else:
-            script = data.get('script', '')
-            path = data.get('path')
-            characters = []
-            reedit = bool(data.get('reedit', False))
-            useless = bool(data.get('useless', False))
-            upsert(path, script, characters, reedit, useless)
-        
-        i = pages.index(Path(path))
-        if prev:
-            if i - 1 < 0:
-                p = pages[i]
-            else:
-                p = pages[i-1]
-        else:
-            try:
-                p = pages[i+1]
-            except IndexError:
-                return render_template('finish.html')
-    elif request.method == 'GET':
-        p = get_latest()
-    
-    data = find_one(p.as_posix())
-    progress = round(collection.count() * 100 / len(pages), 2)
-    return render_template('index.html', path=p, progress=progress, data=data)
-
-def skip_next(data, orig):
-    if data is None:
-        return orig
-    if data['useless']:
-        data['characters'] = ['none']
-        collection.update({'path':data['path']}, data, upsert=True)
-        i = pages.index(Path(data['path']))
-        next_data = find_one(pages[i+1].as_posix())
-        if next_data is None:
-            return find_one(pages[i].as_posix())
-        return skip_next(next_data, orig)
-    else:
-        return data
-
-def skip_prev(data, orig):
-    if data['useless']:
-        i = pages.index(Path(data['path']))
-        prev_data = find_one(pages[i-1].as_posix())
-        if prev_data is None:
-            i = pages.index(Path(orig['path']))
-            return find_one(pages[i+1].as_posix())
-        return skip_prev(prev_data, orig)
-    else:
-        return data
 
 # TODO: complete画面, pagesの最後
 @app.route('/', methods=['GET', 'POST'])
@@ -140,18 +81,10 @@ def index():
         p = get_tag_latest()
 
     data = find_one(p.as_posix())
-    #if prev:
-    #    data = skip_prev(data, data)
-    #else:
-    #    data = skip_next(data, data)
     p = Path(data['path']) if data else p
     characters = {c:True for c in data['characters']} if data else []
     progress = round(collection.find({'characters':{'$ne':[]}}).count() * 100 / len(pages), 2)
     return render_template('index.html', path=p, progress=progress, characters=characters)
-
-#@app.route('/test')
-def test():
-    return render_template('finish.html')
 
 @app.route('/data/<path:filename>')
 def data(filename):
@@ -171,4 +104,3 @@ def js(filename):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
-
