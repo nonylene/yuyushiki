@@ -6,6 +6,8 @@ from pathlib import Path
 from flask import Flask, render_template, send_from_directory, request, send_file
 from pymongo import Connection
 
+from face import Face
+
 from os import path
 import json
 
@@ -13,6 +15,8 @@ app = Flask(__name__)
 app.config.update(
     DEBUG=True,
 )
+
+# TODO: sqlite, chalacters, rectangle, peewee, pics
 
 con = Connection('localhost', 27017)
 collection = con.yuyushiki.comics
@@ -26,7 +30,6 @@ pages.sort()
 json_path = path.join(path.abspath(path.dirname(__file__)), 'config.json')
 with open(json_path) as data_file:
     config = json.load(data_file)
-
 
 def get_latest():
     latest = list(collection.find({}).sort('_id',-1).limit(1))
