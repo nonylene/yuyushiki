@@ -46,8 +46,7 @@ def upsert(path, script='', characters=[], reedit=False, useless=False):
             'reedit':reedit, 'useless':useless}
     collection.update({'path':path}, d, upsert=True) 
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
+def _unused():
     prev = False
     if request.method == 'POST':
         data = request.form
@@ -106,8 +105,8 @@ def skip_prev(data, orig):
         return data
 
 # TODO: complete画面, pagesの最後
-@app.route('/tag/', methods=['GET', 'POST'])
-def tag():
+@app.route('/', methods=['GET', 'POST'])
+def index():
     prev = False
     if request.method == 'POST':
         data = request.form
@@ -125,7 +124,7 @@ def tag():
                 collection.update({'path':path}, data, upsert=True) 
             else:
                 upsert(path, characters=characters)
-        
+
         i = pages.index(Path(path))
         if prev:
             if i - 1 < 0:
@@ -139,7 +138,7 @@ def tag():
                 return render_template('finish.html')
     elif request.method == 'GET':
         p = get_tag_latest()
-    
+
     data = find_one(p.as_posix())
     #if prev:
     #    data = skip_prev(data, data)
@@ -148,7 +147,7 @@ def tag():
     p = Path(data['path']) if data else p
     characters = {c:True for c in data['characters']} if data else []
     progress = round(collection.find({'characters':{'$ne':[]}}).count() * 100 / len(pages), 2)
-    return render_template('tag.html', path=p, progress=progress, characters=characters)
+    return render_template('index.html', path=p, progress=progress, characters=characters)
 
 #@app.route('/test')
 def test():
