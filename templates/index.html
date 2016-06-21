@@ -27,45 +27,52 @@ div#forms ul#characters li img{
 div#forms p{
 	clear: both;
 }
+div#forms button{
+  border: 0;
+  background: transparent;
+}
 </style>
-<script src="../js/main.js"></script>
 <script src="../js/lib/jquery.hotkeys.js"></script>
+<script>
+$(function(){
+    {% for character in config.characters %}
+    $(document).bind('keydown', '{{ character.hotkey }}', function(){
+      $('#{{ character.tag_name  }}').click();
+	});
+    {% endfor %}
+});
+</script>
 {% endblock %}
 {% block content %}
 <div id="content">
-	<h2>{{ path.name }}</h2>
-	<img src="../{{ path.as_posix() }}" alt="this is a image" height=400/>
-	<div id="forms">
-		<form method="POST" action="./">
-			<ul id="characters">
-				<li><img src="../img/fumi.png" height=80 id="fumi" onclick="setVal(this)" {% if characters.fumi %}class="selected"{% endif %}/>a:長谷川ふみ</li>
-				<li><img src="../img/other.png" height=80 id="other" onclick="setVal(this)" {% if characters.other %}class="selected"{% endif %}/>s:その他</li>
-				<li><img src="../img/aikawa.png" height=80 id="aikawa" onclick="setVal(this)" {% if characters.aikawa %}class="selected"{% endif %}/>d:相川千穂</li>
-				<li><img src="../img/yui.png" height=80 id="yui" onclick="setVal(this)" {% if characters.yui %}class="selected"{% endif %}/>f:唯</li>
-				<li><img src="../img/kei.png" height=80 id="kei" onclick="setVal(this)" {% if characters.kei %}class="selected"{% endif %}/>h:岡野佳</li>
-				<li><img src="../img/yukari.png" height=80 id="yukari" onclick="setVal(this)" {% if characters.yukari %}class="selected"{% endif %}/>j:縁</li>
-				<li><img src="../img/yuzuko.png" height=80 id="yuzuko" onclick="setVal(this)" {% if characters.yuzuko %}class="selected"{% endif %}/>k:ゆずこ</li>
-				<li><img src="../img/okasan.png" height=80 id="okasan" onclick="setVal(this)" {% if characters.okasan %}class="selected"{% endif %}/>l:松本頼子</li>
-			</ul>
-			<input type="hidden" name="characters" id="yuzuko_input" {% if characters.yuzuko %}value="yuzuko"{% endif %}/>
-			<input type="hidden" name="characters" id="yukari_input" {% if characters.yukari %}value="yukari"{% endif %}/>
-			<input type="hidden" name="characters" id="yui_input" {% if characters.yui %}value="yui"{% endif %}/>
-			<input type="hidden" name="characters" id="aikawa_input" {% if characters.aikawa %}value="aikawa"{% endif %}/>
-			<input type="hidden" name="characters" id="kei_input" {% if characters.kei %}value="kei"{% endif %}/>
-			<input type="hidden" name="characters" id="fumi_input" {% if characters.fumi %}value="fumi"{% endif %}/>
-			<input type="hidden" name="characters" id="okasan_input" {% if characters.okasan %}value="okasan"{% endif %}/>
-			<input type="hidden" name="characters" id="other_input" {% if characters.other %}value="other"{% endif %}/>
-			<p>
-			<label><input type="submit" value="submit" id="submit"/></label>
-			<input type="hidden" name="path" value="{{ path.as_posix() }}"/>
-			<label><input type="submit" name="action" value="prev"/></label>
-			</p>
-		</form>
-	</div>
+	<h2>{{ face.path }}</h2>
+	<img src="/data/{{ face.path }}" alt="this is a image" height=400/>
+  <div id="forms">
+    <form method="post">
+      <ul id="characters">
+        {% for character in config.characters %}
+        <li>
+        <button
+        type="submit"
+        name="character"
+        value="{{ character.tag_name }}"
+        >
+        <img
+        src="{{ character.img_path }}" 
+        height=80 
+        id="{{ character.tag_name }}" 
+        {% if character.tag_name == face.character %}class="selected"{% endif %}
+        />
+        </button>
+        {{ character.hotkey }}:{{ character.name }}
+        </li>
+        {% endfor %}
+      </ul>
+    </form>
+  </div>
 </div>
 <div id="notice">
 	<h2>進捗</h2>
 	<label ><progress value="{{ progress }}" max="100"><span>{{ progress }}</span>%</progress> ({{ progress }}%)</label >
 </div>
 {% endblock %}
-
