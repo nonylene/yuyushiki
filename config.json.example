@@ -41,7 +41,7 @@
         "name": "大室櫻子", 
         "tag_name": "sakurako", 
         "img_path": "/img/sakurako.png",
-        "hotkey": "S"
+        "hotkey": "M"
     },
     {
         "name": "古谷向日葵", 
@@ -50,11 +50,29 @@
         "hotkey": "H"
     },
     {
-        "name": "他", 
-        "tag_name": "other", 
-        "img_path": "/img/other.png",
+        "name": "他ゆるゆり", 
+        "tag_name": "other_yuri", 
+        "img_path": "/img/other_yuri.png",
+        "hotkey": "R"
+    },
+    {
+        "name": "他Face", 
+        "tag_name": "other_face", 
+        "img_path": "/img/other_face.png",
+        "hotkey": "J"
+    },
+    {
+        "name": "他の他", 
+        "tag_name": "other_other", 
+        "img_path": "/img/other_other.png",
         "hotkey": "O"
+    },
+    {
+        "name": "Skip", 
+        "tag_name": "skip", 
+        "img_path": "/img/skip.png",
+        "hotkey": "G"
     }
-    ]
-
+    ],
+    "skip_tag": "skip"
 }
