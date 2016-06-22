@@ -10,25 +10,64 @@ div#content ul#characters li{
 	list-style-type: none;
 	text-align: center;
 }
-div#content ul#characters img{
+div#content ul#characters div{
 	padding:3px;
-	display: block;
 	margin: 0px auto;
+  display: block;
+}
+div#content ul#characters input{
+  transform: scale(1.5);
+}
+div#content ul#characters img{
+  padding:5px;
+  height:80px;
+  display: block;
 }
 </style>
+<script>
+$(() => {
+    $("#character_button").click(() => {
+        var tag_name = $("#character_select").val()
+        var ids = Array.prototype.map.call(
+          document.querySelectorAll('input[type="checkbox"]:checked'),
+          (object) => object.getAttribute('face_id')
+        )
+        $.ajax({
+          type: 'POST',
+          url: '/bulk/' + tag_name,
+          data: {
+            'ids': JSON.stringify(ids),
+          }
+        }).done((data) => {
+          if (confirm("success! reload?")) {
+            location.reload()
+          }
+        });
+      }
+    )
+})
+</script>
 {% endblock %}
 {% block content %}
 <div id="content">
   <h2>Character List : {{ faces | length }} faces</h2>
+  <select id='character_select'>
+    {% for character in config.characters %}
+    <option value='{{ character.tag_name }}'>{{ character.name }}</option>
+    {% endfor %}
+  </select>
+  <button id="character_button">Set character</button>
   <ul id="characters">
     {% for face in faces %}
     <li>
-    <a href="/{{ face.id  }}">
-      <img
-      src="/{{ face.face_path }}"
-      height=80
-      />
-    </a>
+    <div>
+      <input type='checkbox' face_id="{{ face.id }}" >
+      <a href="/{{ face.id  }}">
+        <img
+        src="/{{ face.face_path }}"
+        />
+      </a>
+    </div>
     </li>
     {% endfor %}
   </ul>

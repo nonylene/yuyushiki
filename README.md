@@ -1,7 +1,7 @@
 yuyushiki
 =========
 
-Yuyushiki Annotation Tool
+Annotation Tool
 
 依存関係
 -----------

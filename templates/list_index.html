@@ -18,10 +18,10 @@ div#content ul#characters img{
 <div id="content">
   <h2>Character List</h2>
   <ul id="characters">
-    {% for character in characters %}
+    {% for character in config.characters %}
     <li>
-    <a href="/list/{{ character.character }}">
-      {{ character.character }}
+    <a href="/list/{{ character.tag_name }}">
+      {{ character.name }}
     </a>
     </li>
     {% endfor %}
