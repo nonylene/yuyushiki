@@ -51,9 +51,13 @@ def index_id(id):
 def finish():
     return render_template('finish.html', config=config)
 
-@app.route('/data/<path:filename>')
-def data(filename):
-    return send_from_directory(root.as_posix(), filename)
+@app.route('/faces/<path:filename>')
+def faces(filename):
+    return send_from_directory('faces', filename)
+
+@app.route('/shots/<path:filename>')
+def shots(filename):
+    return send_from_directory('shots', filename)
 
 @app.route('/img/<path:filename>')
 def img(filename):
@@ -62,6 +66,10 @@ def img(filename):
 @app.route('/js/lib/<path:filename>')
 def js(filename):
     return send_from_directory('templates/lib', filename)
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory('img', "favicon.ico")
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
