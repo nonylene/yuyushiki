@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block extrahead %}
+<style type="text/css">
+div#content{
+	margin-top: 20px;
+}
+div#content ul#characters li{
+	display: block;
+}
+div#content ul#characters img{
+	padding:3px;
+	display: block;
+	margin: 0px auto;
+}
+</style>
+{% endblock %}
+{% block content %}
+<div id="content">
+  <h2>Character List</h2>
+  <ul id="characters">
+    {% for character in characters %}
+    <li>
+    <a href="/list/{{ character.character }}">
+      {{ character.character }}
+    </a>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

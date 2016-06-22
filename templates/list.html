@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block extrahead %}
+<style type="text/css">
+div#content{
+	margin-top: 20px;
+}
+div#content ul#characters li{
+	display: block;
+	float: left;
+	list-style-type: none;
+	text-align: center;
+}
+div#content ul#characters img{
+	padding:3px;
+	display: block;
+	margin: 0px auto;
+}
+</style>
+{% endblock %}
+{% block content %}
+<div id="content">
+  <h2>Character List</h2>
+  <ul id="characters">
+    {% for face in faces %}
+    <li>
+    <a href="/{{ face.id  }}">
+      <img
+      src="/{{ face.face_path }}"
+      height=80
+      />
+    </a>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

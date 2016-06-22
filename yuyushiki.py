@@ -47,6 +47,16 @@ def index_id(id):
         progress = round(Face.select().where(Face.character != None).count() * 100 / Face.select().count(), 2)
         return render_template('index.html', face=next_face, progress=progress, config=config)
 
+@app.route('/list/<character>')
+def list(character):
+    faces = Face.select().where(Face.character == character)
+    return render_template('list.html', faces=faces, config=config)
+
+@app.route('/list/')
+def list_index():
+    characters = Face.select(Face.character).distinct()
+    return render_template('list_index.html', characters=characters, config=config)
+
 @app.route('/finish')
 def finish():
     return render_template('finish.html', config=config)
