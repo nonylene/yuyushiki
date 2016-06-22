@@ -19,7 +19,7 @@ div#content ul#characters img{
 {% endblock %}
 {% block content %}
 <div id="content">
-  <h2>Character List</h2>
+  <h2>Character List : {{ faces | length }} faces</h2>
   <ul id="characters">
     {% for face in faces %}
     <li>
