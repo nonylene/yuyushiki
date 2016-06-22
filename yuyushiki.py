@@ -30,11 +30,11 @@ def index():
 def index_id(id):
     if request.method == 'POST':
         data = request.form
-        character = data.get('character')
-        if character:
-            face = Face.get(Face.id == id)
-            face.character = character
-            face.save()
+        c = data.get('character')
+        if c and c != config["skip_tag"]:
+            print(c)
+            query = Face.update(character = c).where(Face.id == id)
+            query.execute()
         next_id = int(id) + 1
         return redirect(url_for("index_id", id = next_id))
 

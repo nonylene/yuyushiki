@@ -8,6 +8,10 @@
 	padding:3px;
 	cursor:pointer;
 }
+div#forms{
+	margin-top: 20px;
+  max-width: 600px;
+}
 div#forms ul#characters {
 	min-height: 100px;
 	margin: 0;
@@ -34,19 +38,38 @@ div#forms button{
 </style>
 <script src="../js/lib/jquery.hotkeys.js"></script>
 <script>
-$(function(){
-    {% for character in config.characters %}
-    $(document).bind('keydown', '{{ character.hotkey }}', function(){
+$(() => {
+  {% for character in config.characters %}
+    $(document).bind('keypress', '{{ character.hotkey }}', () => {
       $('#{{ character.tag_name  }}').click();
-	});
-    {% endfor %}
+    });
+  {% endfor %}
 });
+</script>
+<script>
+onload = () => {
+  var src="/{{ face.pic_path }}"
+  var canvas = document.getElementById("canvas")
+  var ctx = canvas.getContext("2d");
+  var background = new Image();
+  background.src = src
+
+  background.onload = function(){
+      var scale = canvas.height / this.height
+      ctx.drawImage(background,0,0,this.width, this.height,0,0,this.width * scale, this.height * scale)
+
+      ctx.beginPath()
+      ctx.lineWidth = 2
+      ctx.strokeStyle = 'red'
+      ctx.strokeRect({{ face.x }} * scale , {{ face.y }} * scale , {{ face.w }} * scale , {{ face.h }} * scale)
+  }
+}
 </script>
 {% endblock %}
 {% block content %}
 <div id="content">
-	<h2>{{ face.path }}</h2>
-	<img src="/data/{{ face.path }}" alt="this is a image" height=400/>
+	<h2>{{ face.face_path }}</h2>
+  <canvas height=400 width=800 id="canvas"></canvas>
   <div id="forms">
     <form method="post">
       <ul id="characters">
