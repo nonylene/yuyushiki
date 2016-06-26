@@ -40,6 +40,11 @@ $(() => {
           }
         }).done((data) => {
           if (confirm("success! reload?")) {
+            var ids = Array.prototype.map.call(
+                document.querySelectorAll('input[type="checkbox"]:checked'),
+                (object) => object.checked = false
+            )
+
             location.reload()
           }
         });
