@@ -3,58 +3,33 @@ yuyushiki
 
 Annotation Tool
 
+forked from [non117/yuyushiki](https://github.com/non117/yuyushiki)
+
 依存関係
 -----------
-* Python 3.4 or higher ( 実は2.xでも動く )
-* flask ( cgiではアレかもわからん )
-* MongoDB + pymongo
+* Python 3.4 or higher
+* flask
+* peewee (SQlite)
 
 仕様
 ------------
-1. data/hoge ディレクトリの画像を見に行きます
-2. 画像とフォームをブラウザに表示します
-3. タグ付け等アノテーションをしてもらいます
+1. "pic_path" を見に行きます
+2. 画像と顔の四角形をブラウザに表示します
+3. キャラ分類をしてもらいます
 4. submitされたら、データを記録し、次の画像を表示します
 
 データ形式
 ----------------
-monogoDB使う。yuyushiki.comics
+SQlite / face
 
-* 画像ファイルのパス [主キー] : path
-* 台詞文字列 : script
-* [人物タグ] : characters
-* 要修正 bool : reedit, デフォルトオフ
-* いらない画像 bool : useless, デフォルトオフ
+* 画像ファイルのパス : pic_path
+* 人物タグ : character
+* 顔の場所 : x / y / w / h
+* 顔画像の場所 : face_path
 
-* characters : ["野々原ゆずこ", "櫟井唯", "日向縁", "相川千穂", "岡野佳", "長谷川ふみ", "松本頼子", "その他", "無し"]
+* characters : see config.json.example
 
-
-UI
-----------------
-* 台詞入力, データの分別と、キャラのタグ付け作業はurlごと分離する
-* ↑ 独立して作業が可能に
-* 台詞は人間ががんばって入力する
-* 人物タグは補完ができるようにすると良いかも
-* ↑ あるいはシステム側にタグとして持たせておく
-* 3人全員タグ
-* キーボードショートカットを実装しておく
-* 単一ページでがんばるぞい
-* 進捗バーを表示する
-* 戻るボタンが実装された
 
 その他
 ----------------
-* アノテーションしたデータが飛ぶとつらいので逐次DBにinsert
-* データができたらランダム4コマシステムに応用します
-
-無限4コマシステム
-====================
-
-永遠にゆゆ式を楽しめる楽園を実現します
-https://github.com/non117/yuyushiki/issues/5
-
-仕様
----------
-* 
-
-
+* /list で一覧
